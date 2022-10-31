@@ -1,7 +1,7 @@
 import cn from 'clsx'
 import type { SearchPropsType } from '@lib/search-props'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Router, { useRouter } from 'next/router'
 import ClickOutside from '@lib/click-outside'
 
@@ -26,6 +26,7 @@ import {
   useSearchMeta,
 } from '@lib/search'
 import { divide } from 'lodash'
+import { brotliCompress, brotliCompressSync } from 'zlib'
 
 export default function Search({ categories, brands }: SearchPropsType) {
   const t = useTranslations('search')
@@ -84,7 +85,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
     (_b: any) => getSlug(_b.node.path) === b
   )?.node
 
-  const { data } = useSearch({
+  let { data } = useSearch({
     search: typeof q === 'string' ? q : '',
     categoryIds: categoryIds.filter((a) => a).join(),
     brandId: (activeBrand as any)?.entityId,
@@ -116,8 +117,50 @@ export default function Search({ categories, brands }: SearchPropsType) {
     t('size'),
     t('reset_all'),
   ]
+    
+  // const product: any = { 
+  //   node: [
+  //     {
+  //       displayName: 'size',
+  //       node: [
+  //         {
+  //           displayName: 'Xl'
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // }
+    
+  // sizeNode = product.node.find(node => node.displayName === 'size');
+  
+  // const size = sizeNode.nodes.map(node => node.displayName); 
 
-  console.log(filterNames)
+  // ['XL', 'x', 's'].includes(userinput)
+  // console.log("filternames-->",filterNames)
+  console.log("dataaa-->", data)
+//   let xyz: any = data?.products?.filter((product: any)=>{
+//     let b = product?.productOptions?.edges?.find((edge: any) => {
+//       let bc = edge.node.values.edges.find((edge: any) => edge.node.label == "XL")
+//       console.log("bcc",bc)
+//       return edge.node.displayName == "Size" && bc
+//     })
+//     return b
+// })
+//   console.log("object", xyz);
+  
+  // let fill:any = data?.products.filter((product: any) => product.productOptions)
+  // console.log("fill--->", fill)
+  // // let abc: any = fill?.edges?.find((val: any)=>val.node.displayName=="Size")
+  // let abc: any = fill?.filter((edges: any) => { console.log(edges); return edges?.edges.find((val: any)=>val.node.displayName=="Size")})
+  // console.log("xxxxxx--->", abc)
+
+  // let size = fill?.filter((a: any) => Object.keys(a.edges).length !== 0)
+  // console.log("sizess-->", size);
+  // let mapNode = size?.filter((b: any) => b.edges)
+  // console.log("mapNode-->", mapNode)
+
+  // console.log("dataaa-->",data?.products.filter((a: any) => a.productOptions))
+
   const sizes = ['xs', 's', 'm', 'l', 'xl', 'xxl']
 
   const STEP = 1
@@ -131,7 +174,22 @@ export default function Search({ categories, brands }: SearchPropsType) {
     useState(false)
   const [toggleBrandElement, setToggleBrandElement] = useState(false)
   const [toggleSizeElement, setToggleSizeElement] = useState(false)
+  let [products, setProducts] = useState(data?.products)
+  
+  useEffect(() => {
+    setProducts(data?.products)
+  }, [data?.products])
 
+  const productSize = (item: string) => {
+    products = data?.products?.filter((product: any)=>{
+      let findEdges = product?.productOptions?.edges?.find((edge: any) => {
+        let findNode = edge.node.values.edges.find((edge: any) => edge.node.label == item.toUpperCase())
+        return edge.node.displayName == "Size" && findNode
+      })
+      return findEdges
+    })
+    setProducts(products)
+}
   return (
     <>
       <div className="bg-[url('/catalog-bg.png')] bg-cover h-60"></div>
@@ -709,6 +767,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                                         <div
                                           key={index}
                                           className="border border-[#C9C9C9] w-[3rem] h-[2.5rem] hover:bg-[#70877B] hover:text-white hover:border-[#70877B] flex items-center justify-center cursor-pointer  font-medium  leading-6 text-[1rem] uppercase"
+                                        onClick={()=> productSize(item)}
                                         >
                                           {item}
                                         </div>
@@ -931,7 +990,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
             <div className="clear-both"></div>
             {data && data.found == true ? (
               <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
-                {data.products.map((product: Product) => (
+                {products?.map((product: Product) => (
                   <ProductCard
                     variant="simple"
                     key={product.path}
