@@ -66,7 +66,7 @@ export default function About() {
             </p>
           </div>
         </div>
-        <SimilarProducts />
+        {/* <SimilarProducts /> */}
       </Container>
     </div>
   )

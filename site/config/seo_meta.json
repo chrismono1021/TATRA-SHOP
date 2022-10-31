@@ -1,19 +1,19 @@
 {
   "title": "Tatra Hills | Shop",
   "titleTemplate": "%s - Tatra Hills",
-  "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+  "description": "Save the planet - give clothes a second life",
   "openGraph": {
     "title": "Tatra Hills | Shop",
-    "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+    "description": "Tatra Hills - save the planet - give clothes a second life",
     "type": "website",
     "url": "https://nextjs.org/commerce",
-    "site_name": "Next.js Commerce",
+    "site_name": "Tatra Hills",
     "images": [
       {
         "url": "/card.png",
         "width": "800",
         "height": "600",
-        "alt": "Next.js Commerce"
+        "alt": "Tatra Hills"
       }
     ]
   },

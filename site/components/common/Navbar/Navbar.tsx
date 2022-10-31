@@ -42,9 +42,9 @@ const Navbar: FC<NavbarProps> = ({ links }) => {
               <Link href="/search">
                 <a className={s.link}>{t('catalog')}</a>
               </Link>
-              <Link href="/blogs">
+              {/* <Link href="/blogs">
                 <a className={s.link}>{t('blog')}</a>
-              </Link>
+              </Link> */}
               <Link href="/about">
                 <a className={s.link}>{t('about_us')}</a>
               </Link>
