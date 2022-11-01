@@ -55,6 +55,7 @@ export type SearchProductsBody = {
   locale?: string
   priceMin?: string | number
   priceMax?: string | number
+  sizeFilter?: string
 }
 
 export type ProductTypes = {

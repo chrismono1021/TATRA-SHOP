@@ -12,6 +12,7 @@ export type SearchProductsInput = {
   locale?: string
   priceMin?: number | string
   priceMax?: number | string
+  sizeFilter?: string
 }
 
 export const handler: SWRHook<SearchProductsHook> = {
@@ -28,6 +29,7 @@ export const handler: SWRHook<SearchProductsHook> = {
       sort,
       priceMin,
       priceMax,
+      sizeFilter
     },
     options,
     fetch,
@@ -46,6 +48,7 @@ export const handler: SWRHook<SearchProductsHook> = {
       url.searchParams.set('priceMin', String(priceMin))
     if (Number.isInteger(Number(priceMax)))
       url.searchParams.set('priceMax', String(priceMax))
+    if (sizeFilter) url.searchParams.set('sizeFilter', sizeFilter)
 
     return fetch({
       url: url.pathname + url.search,
@@ -64,6 +67,7 @@ export const handler: SWRHook<SearchProductsHook> = {
           ['sort', input.sort],
           ['priceMin', input.priceMin],
           ['priceMax', input.priceMax],
+          ['sizeFilter', input.sizeFilter]
         ],
         swrOptions: {
           revalidateOnFocus: false,
