@@ -191,5 +191,12 @@
   "privacy": {
     "title-1": "Slovak title",
     "description-1": "Slovak Description"
+  },
+
+  "contacts": {
+    "title": "Kontaktuj nás",
+    "worktime": "pondelok - piatok: 9.00 - 16.00",
+    "contact_person": "Kontaktná osoba eshopu: Vladyslav Kolesnyk",
+    "info": "Výdajné miesto pre osobný odber: Tatrahills . Osloboditeľov 42 Košice 04017. ( Areal Barca)."
   }
 }

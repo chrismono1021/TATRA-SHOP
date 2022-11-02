@@ -52,11 +52,11 @@ const Footer: FC<Props> = ({ className, pages }) => {
                   </a>
                 </Link>
               </li>
-              <li className="pb-1">
+              {/* <li className="pb-1">
                 <Link href="/blogs">
                   <a className="text-white font-normal text-lg">{t('blog')}</a>
                 </Link>
-              </li>
+              </li> */}
               <li className="pb-1">
                 <Link href="/about">
                   <a className="text-white font-normal text-lg">
@@ -65,7 +65,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
                 </Link>
               </li>
               <li className="pb-1">
-                <Link href="/">
+                <Link href="/contacts">
                   <a className="text-white font-normal text-lg">
                     {t('contact_us')}
                   </a>

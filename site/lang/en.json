@@ -191,5 +191,11 @@
   "privacy": {
     "title-1": "Slovak title",
     "description-1": "Slovak Description"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "worktime": "Monday - Friday: 9.00 - 16.00",
+    "contact_person": "E-shop contact person: Vladyslav Kolesnyk",
+    "info": "Personal collection point: Tatrahills . Osloboditelov 42 Košice 04017. ( Areal Barca). Slovakia"
   }
 }
