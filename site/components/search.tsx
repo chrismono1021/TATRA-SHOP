@@ -1,7 +1,7 @@
 import cn from 'clsx'
 import type { SearchPropsType } from '@lib/search-props'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Router, { useRouter } from 'next/router'
 import ClickOutside from '@lib/click-outside'
 
@@ -26,6 +26,7 @@ import {
   useSearchMeta,
 } from '@lib/search'
 import { divide } from 'lodash'
+import { brotliCompress, brotliCompressSync } from 'zlib'
 
 export default function Search({ categories, brands }: SearchPropsType) {
   const t = useTranslations('search')
@@ -44,21 +45,21 @@ export default function Search({ categories, brands }: SearchPropsType) {
 
   const router = useRouter()
   const { asPath, locale } = router
-  const { q, sort, price_min, price_max, g, c, b } = router.query
+  const { q, sort, price_min, price_max, g, c, b, size } = router.query
   const routeQuery = router.query
   // `q` can be included but because categories and designers can't be searched
   // in the same way of products, it's better to ignore the search input if one
   // of those is selected
-  const query = filterQuery({ q, sort, price_min, price_max, g, c, b })
+  const query = filterQuery({ q, sort, price_min, price_max, g, c, b, size })
 
-  const tagsGender: Any[] = []
+  const tagsGender: any = []
   const slugsGender =
     typeof g === 'undefined' ? [] : [...new Set(String(g).split(','))]
   slugsGender.map((item, index) => {
     tagsGender.push(categories.find((cat: any) => cat.slug === item))
   })
 
-  const tagsCategory: Any[] = []
+  const tagsCategory: any = []
   const slugsCategory =
     typeof c === 'undefined' ? [] : [...new Set(String(c).split(','))]
   slugsCategory.map((item, index) => {
@@ -67,12 +68,12 @@ export default function Search({ categories, brands }: SearchPropsType) {
 
   const categoryIds: Number[] = []
   if (tagsGender.length > 0) {
-    tagsGender.map((item, index) => {
+    tagsGender.map((item: any, index: any) => {
       categoryIds.push(Number(item.id))
     })
   }
   if (tagsCategory.length > 0) {
-    tagsCategory.map((item, index) => {
+    tagsCategory.map((item: any, index: any) => {
       categoryIds.push(Number(item.id))
     })
   }
@@ -84,7 +85,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
     (_b: any) => getSlug(_b.node.path) === b
   )?.node
 
-  const { data } = useSearch({
+  let { data } = useSearch({
     search: typeof q === 'string' ? q : '',
     categoryIds: categoryIds.filter((a) => a).join(),
     brandId: (activeBrand as any)?.entityId,
@@ -92,6 +93,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
     locale,
     priceMin: typeof price_min === 'string' ? price_min : '',
     priceMax: typeof price_max === 'string' ? price_max : '',
+    sizeFilter: typeof size === 'string' ? size : '',
   })
 
   const handleClick = (event: any, filter: string) => {
@@ -117,7 +119,6 @@ export default function Search({ categories, brands }: SearchPropsType) {
     t('reset_all'),
   ]
 
-  console.log(filterNames)
   const sizes = ['xs', 's', 'm', 'l', 'xl', 'xxl']
 
   const STEP = 1
@@ -131,7 +132,22 @@ export default function Search({ categories, brands }: SearchPropsType) {
     useState(false)
   const [toggleBrandElement, setToggleBrandElement] = useState(false)
   const [toggleSizeElement, setToggleSizeElement] = useState(false)
+  let [products, setProducts] = useState(data?.products)
+  
+  useEffect(() => {
+    setProducts(data?.products)
+  }, [data?.products])
 
+  const productSize = (item: string) => {
+    products = data?.products?.filter((product: any)=>{
+      let findEdges = product?.productOptions?.edges?.find((edge: any) => {
+        let findNode = edge.node.values.edges.find((edge: any) => edge.node.label == item.toUpperCase())
+        return edge.node.displayName == "Size" && findNode
+      })
+      return findEdges
+    })
+    setProducts(products)
+}
   return (
     <>
       <div className="bg-[url('/catalog-bg.png')] bg-cover h-60"></div>
@@ -139,7 +155,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
         <div className="flex space-between justify-between">
           <div className="w-[calc(50%-10px)] md:w-[calc(100%-200px)]">
             <div className="hidden md:block pt-[1.5rem]">
-              {tagsGender.map((item, index) => {
+              {tagsGender.map((item: any, index: any) => {
                 return (
                   <div
                     key={index}
@@ -150,7 +166,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                       onClick={(e) => {
                         tagsGender.splice(index, 1)
                         let genderIds: String[] = []
-                        tagsGender.map((item, index) => {
+                        tagsGender.map((item: any, index: any) => {
                           genderIds.push(item.slug)
                         })
                         router.push(
@@ -177,7 +193,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                   </div>
                 )
               })}
-              {tagsCategory.map((item, index) => {
+              {tagsCategory.map((item: any, index: any) => {
                 return (
                   <div
                     key={index}
@@ -188,7 +204,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                       onClick={(e) => {
                         tagsCategory.splice(index, 1)
                         let categoryIds: String[] = []
-                        tagsCategory.map((item, index) => {
+                        tagsCategory.map((item: any, index: any) => {
                           categoryIds.push(item.slug)
                         })
                         router.push(
@@ -277,6 +293,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                                   sort: key,
                                   price_min,
                                   price_max,
+                                  size
                                 }),
                               }}
                             >
@@ -369,11 +386,12 @@ export default function Search({ categories, brands }: SearchPropsType) {
                                                     sort,
                                                     price_min,
                                                     price_max,
+                                                    size
                                                   }),
                                                 }}
                                               >
                                                 <a
-                                                  onClick={(e) => {
+                                                  onClick={(e: any) => {
                                                     e.preventDefault()
                                                     router.push(
                                                       e.target.getAttribute(
@@ -576,11 +594,12 @@ export default function Search({ categories, brands }: SearchPropsType) {
                                                     sort,
                                                     price_min,
                                                     price_max,
+                                                    size
                                                   }),
                                                 }}
                                               >
                                                 <a
-                                                  onClick={(e) => {
+                                                  onClick={(e: any) => {
                                                     e.preventDefault()
                                                     router.push(
                                                       e.target.getAttribute(
@@ -650,11 +669,12 @@ export default function Search({ categories, brands }: SearchPropsType) {
                                                     sort,
                                                     price_min,
                                                     price_max,
+                                                    size
                                                   }),
                                                 }}
                                               >
                                                 <a
-                                                  onClick={(e) => {
+                                                  onClick={(e: any) => {
                                                     e.preventDefault()
                                                     router.push(
                                                       e.target.getAttribute(
@@ -709,8 +729,25 @@ export default function Search({ categories, brands }: SearchPropsType) {
                                         <div
                                           key={index}
                                           className="border border-[#C9C9C9] w-[3rem] h-[2.5rem] hover:bg-[#70877B] hover:text-white hover:border-[#70877B] flex items-center justify-center cursor-pointer  font-medium  leading-6 text-[1rem] uppercase"
+                                        onClick={()=> productSize(item)}
                                         >
-                                          {item}
+                                           <Link
+                                                href={{
+                                                  pathname,
+                                                  query: filterQuery({
+                                                    q,
+                                                    g,
+                                                    c,
+                                                    b,
+                                                    sort,
+                                                    price_min,
+                                                    price_max,
+                                                    size: String(item)
+                                                  }),
+                                                }}
+                                              >
+                                           {item}
+                                            </Link>
                                         </div>
                                       )
                                     })}
@@ -796,7 +833,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
           {/* Products */}
           <div className="col-span-3">
             <div className="block md:hidden">
-              {tagsGender.map((item, index) => {
+              {tagsGender.map((item: any, index: any) => {
                 return (
                   <div
                     key={index}
@@ -807,7 +844,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                       onClick={(e) => {
                         tagsGender.splice(index, 1)
                         let genderIds: String[] = []
-                        tagsGender.map((item, index) => {
+                        tagsGender.map((item: any, index: any) => {
                           genderIds.push(item.slug)
                         })
                         router.push(
@@ -834,7 +871,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                   </div>
                 )
               })}
-              {tagsCategory.map((item, index) => {
+              {tagsCategory.map((item: any, index: any) => {
                 return (
                   <div
                     key={index}
@@ -845,7 +882,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
                       onClick={(e) => {
                         tagsCategory.splice(index, 1)
                         let categoryIds: String[] = []
-                        tagsCategory.map((item, index) => {
+                        tagsCategory.map((item: any, index: any) => {
                           categoryIds.push(item.slug)
                         })
                         router.push(
@@ -931,7 +968,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
             <div className="clear-both"></div>
             {data && data.found == true ? (
               <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
-                {data.products.map((product: Product) => (
+                {products?.map((product: Product) => (
                   <ProductCard
                     variant="simple"
                     key={product.path}
