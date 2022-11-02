@@ -152,10 +152,10 @@ const ProductView: FC<ProductViewProps> = ({ product, relatedProducts }) => {
         </section>
         {fullImage && (
           <div className={s.fullsizePhoto}>
-            <div
-              style={{ backgroundImage: `url(${fullImage})` }}
-              onClick={() => setFullImage('')}
-            ></div>
+            <div style={{ backgroundImage: `url(${fullImage})` }}></div>
+            <div className={s.crossMark} onClick={() => setFullImage('')}>
+              &#215;
+            </div>
           </div>
         )}
       </Container>
