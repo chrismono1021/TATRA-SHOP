@@ -29,7 +29,7 @@ module.exports = {
         'accent-7': 'var(--accent-7)',
         'accent-8': 'var(--accent-8)',
         'accent-9': 'var(--accent-9)',
-        violet: 'var(--violet)',
+        violet: 'var(--tw-bg-opacity)',
         'violet-light': 'var(--violet-light)',
         'violet-dark': 'var(--violet-dark)',
         pink: 'var(--pink)',

@@ -115,7 +115,7 @@
     "taxes": "dane",
     "calculated_at_checkout": "Vypočítané pri pokladni",
     "estimated_shipping": "Odhadovaná doprava",
-    "free": "ZADARMO",
+    "free": "Cena v ďalšom postupe",
     "total": "Celkom",
     "continue_shopping": "Pokračovať v nákupe",
     "proceed_to_checkout": "Pokračujte k pokladni"
@@ -158,7 +158,7 @@
     "method-title": "V ramci Slovenska:",
     "method": {
       "method-1": "Slovenska pošta – 4€",
-      "method-2": "Packeta – 4€"
+      "method-2": "Packeta – 3.5€"
     },
     "method-title-1": "Do Česká:",
     "method-1": {

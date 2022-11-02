@@ -117,7 +117,7 @@ const CartItem = ({
                   key={`${item.id}-${option.name}`}
                   className="text-sm font-semibold text-accent-7 inline-flex items-center justify-center"
                 >
-                  {option.name}
+                  {option.name} -
                   {option.name === 'Color' ? (
                     <span
                       className="mx-2 rounded-full bg-transparent border w-5 h-5 p-1 text-accent-9 inline-flex items-center justify-center overflow-hidden"
@@ -126,9 +126,7 @@ const CartItem = ({
                       }}
                     ></span>
                   ) : (
-                    <span className="mx-2 rounded-full bg-transparent border h-5 p-1 text-accent-9 inline-flex items-center justify-center overflow-hidden">
-                      {option.value}
-                    </span>
+                    <b className="mx-1 text-[#70877B]">{option.value}</b>
                   )}
                   {i === options.length - 1 ? '' : <span className="mr-3" />}
                 </div>

@@ -24,11 +24,11 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({
           className="pb-4 border-b last:border-b-0 mb-6 last:mb-0"
           key={opt.displayName}
         >
-          <h2 className="uppercase font-medium text-sm tracking-wide">
+          {/* <h2 className="pt-3 uppercase font-medium text-sm tracking-wide">
             {t(opt.displayName.toLowerCase()).length == ''
               ? opt.displayName
               : t(opt.displayName.toLowerCase())}
-          </h2>
+          </h2> */}
           <div role="listbox" className="flex flex-row py-4">
             {opt.values.map((v, i: number) => {
               const active = selectedOptions[opt.displayName.toLowerCase()]

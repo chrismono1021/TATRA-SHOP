@@ -115,7 +115,7 @@
     "taxes": "Taxes",
     "calculated_at_checkout": "Calculated at checkout",
     "estimated_shipping": "Estimated Shipping",
-    "free": "FREE",
+    "free": "Price in the next procedure",
     "total": "Total",
     "continue_shopping": "Continue Shopping",
     "proceed_to_checkout": "Proceed to Checkout"
@@ -158,11 +158,11 @@
     "method-title": "Within Slovakia:",
     "method": {
       "method-1": "Slovak Post - 4 €",
-      "method-2": "Packet - 4€"
+      "method-2": "Packeta - 3.5€"
     },
     "method-title-1": "To Czech:",
     "method-1": {
-      "method-1": " Packet - 5 €"
+      "method-1": " Packeta - 5 €"
     },
     "method-title-2": "To other countries:",
     "method-2": {
