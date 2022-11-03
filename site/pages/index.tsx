@@ -64,13 +64,13 @@ export default function Home({
           <p className="text-[1.9rem] max-w-[14.2rem] font-medium md:mb-6">
             {t('blog_text')}
           </p>
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <Link href="/blogs">
               <a className="invisible md:visible uppercase text-[#FFFFFF] bg-[#70877B]  px-11 py-2 text-2xl w-[11.2rem] text-center font-medium">
                 {t('blog_link')}
               </a>
             </Link>
-          </div>
+          </div> */}
         </div>
         <div className="w-full md:w-3/4 ">
           <Marquee>

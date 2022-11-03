@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "release": "taskr release",
-    "build": "taskr build",
-    "dev": "taskr",
+    "build": "node init && taskr build",
+    "dev": "node init && taskr",
     "types": "tsc --emitDeclarationOnly",
     "generate:definitions": "node scripts/generate-definitions.js"
   },
