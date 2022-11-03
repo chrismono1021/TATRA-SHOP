@@ -34,7 +34,7 @@ const ProductDescription = () => {
       </div>
       <div
         className={`md:border md:border-[#C9C9C9] md:py-10  md:px-10 ${
-          open === true ? 'open' : 'collapse'
+          isMobile ? (open === true ? 'open' : 'collapse') : 'open'
         }`}
       >
         <div className="flex gap-x-3 md:gap-x-6 mb-6">
