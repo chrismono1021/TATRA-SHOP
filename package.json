@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build --scope=next-commerce --include-dependencies --no-deps",
-    "dev": "turbo run dev",
-    "start": "turbo run start",
+    "build": "node init && turbo run build --scope=next-commerce --include-dependencies --no-deps",
+    "dev": "node init && turbo run dev",
+    "start": "node init && turbo run start",
     "types": "turbo run types",
     "prettier-fix": "prettier --write ."
   },

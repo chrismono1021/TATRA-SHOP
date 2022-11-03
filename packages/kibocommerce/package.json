@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "release": "taskr release",
-    "build": "taskr build",
-    "dev": "taskr",
+    "build": "node init && taskr build",
+    "dev": "node init && taskr",
     "types": "tsc --emitDeclarationOnly",
     "prettier-fix": "prettier --write .",
     "generate": "graphql-codegen"
